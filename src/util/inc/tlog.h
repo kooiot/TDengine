@@ -41,6 +41,13 @@ void    taosPrintLog(const char *flags, int32_t dflag, const char *format, ...)
 #endif
 ;
 
+void taosDbgPrintLog(const char *flags, int32_t dflag, char *file, int line, const char *format, ...)
+#ifdef __GNUC__
+ __attribute__((format(printf, 5, 6)))
+#endif
+;
+
+
 void    taosPrintLongString(const char * flags, int32_t dflag, const char *format, ...)
 #ifdef __GNUC__
  __attribute__((format(printf, 3, 4)))

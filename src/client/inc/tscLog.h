@@ -28,9 +28,9 @@ extern int8_t  tscEmbedded;
 #define tscFatal(...)  do { if (cDebugFlag & DEBUG_FATAL) { taosPrintLog("TSC FATAL ", tscEmbedded ? 255 : cDebugFlag, __VA_ARGS__); }} while(0)
 #define tscError(...)  do { if (cDebugFlag & DEBUG_ERROR) { taosPrintLog("TSC ERROR ", tscEmbedded ? 255 : cDebugFlag, __VA_ARGS__); }} while(0)
 #define tscWarn(...)   do { if (cDebugFlag & DEBUG_WARN)  { taosPrintLog("TSC WARN ", tscEmbedded ? 255 : cDebugFlag, __VA_ARGS__); }}  while(0)
-#define tscInfo(...)   do { if (cDebugFlag & DEBUG_INFO)  { taosPrintLog("TSC ", tscEmbedded ? 255 : cDebugFlag, __VA_ARGS__); }} while(0)
-#define tscDebug(...)  do { if (cDebugFlag & DEBUG_DEBUG) { taosPrintLog("TSC ", cDebugFlag, __VA_ARGS__); }} while(0)
-#define tscTrace(...)  do { if (cDebugFlag & DEBUG_TRACE) { taosPrintLog("TSC ", cDebugFlag, __VA_ARGS__); }} while(0)
+#define tscInfo(...)   do { if (cDebugFlag & DEBUG_INFO)  { taosDbgPrintLog("TSC ", tscEmbedded ? 255 : cDebugFlag, __FILE__, __LINE__,__VA_ARGS__); }} while(0)
+#define tscDebug(...)  do { if (cDebugFlag & DEBUG_DEBUG) { taosDbgPrintLog("TSC ", cDebugFlag, __FILE__, __LINE__, __VA_ARGS__); }} while(0)
+#define tscTrace(...)  do { if (cDebugFlag & DEBUG_TRACE) { taosDbgPrintLog("TSC ", cDebugFlag, __FILE__, __LINE__,__VA_ARGS__); }} while(0)
 #define tscDebugL(...) do { if (cDebugFlag & DEBUG_DEBUG) { taosPrintLongString("TSC ", cDebugFlag, __VA_ARGS__); }} while(0)
 
 #ifdef __cplusplus

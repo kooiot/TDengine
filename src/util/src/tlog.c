@@ -345,6 +345,66 @@ static int32_t taosOpenLogFile(char *fn, int32_t maxLines, int32_t maxFileNum) {
   return 0;
 }
 
+void taosDbgPrintLog(const char *flags, int32_t dflag, char *file, int line, const char *format, ...) {
+  if (tsTotalLogDirGB != 0 && tsAvailLogDirGB < tsMinimalLogDirGB) {
+    printf("server disk:%s space remain %.3f GB, total %.1f GB, stop print log.\n", tsLogDir, tsAvailLogDirGB, tsTotalLogDirGB);
+    fflush(stdout);
+    return;
+  }
+
+  va_list        argpointer;
+  char           buffer[MAX_LOGLINE_BUFFER_SIZE] = { 0 };
+  int32_t        len;
+  struct tm      Tm, *ptm;
+  struct timeval timeSecs;
+  time_t         curTime;
+
+  gettimeofday(&timeSecs, NULL);
+  curTime = timeSecs.tv_sec;
+  ptm = localtime_r(&curTime, &Tm);
+
+  len = sprintf(buffer, "%02d/%02d %02d:%02d:%02d.%06d 0x%08" PRIx64 "  %8.8s:%4d ", ptm->tm_mon + 1, ptm->tm_mday, ptm->tm_hour,
+                ptm->tm_min, ptm->tm_sec, (int32_t)timeSecs.tv_usec, taosGetSelfPthreadId(), file, line);
+  len += sprintf(buffer + len, "%s", flags);
+
+  va_start(argpointer, format);
+  int32_t writeLen = vsnprintf(buffer + len, MAX_LOGLINE_CONTENT_SIZE, format, argpointer);
+  if (writeLen <= 0) {
+    char tmp[MAX_LOGLINE_DUMP_BUFFER_SIZE] = {0};
+    writeLen = vsnprintf(tmp, MAX_LOGLINE_DUMP_CONTENT_SIZE, format, argpointer);
+    strncpy(buffer + len, tmp, MAX_LOGLINE_CONTENT_SIZE);
+    len += MAX_LOGLINE_CONTENT_SIZE;
+  } else if (writeLen >= MAX_LOGLINE_CONTENT_SIZE) {
+    len += MAX_LOGLINE_CONTENT_SIZE;
+  } else {
+    len += writeLen;
+  }
+  va_end(argpointer);
+
+  if (len > MAX_LOGLINE_SIZE) len = MAX_LOGLINE_SIZE;
+
+  buffer[len++] = '\n';
+  buffer[len] = 0;
+
+  if ((dflag & DEBUG_FILE) && tsLogObj.logHandle && tsLogObj.logHandle->fd >= 0) {
+    if (tsAsyncLog) {
+      taosPushLogBuffer(tsLogObj.logHandle, buffer, len);
+    } else {
+      taosWrite(tsLogObj.logHandle->fd, buffer, len);
+    }
+
+    if (tsLogObj.maxLines > 0) {
+      atomic_add_fetch_32(&tsLogObj.lines, 1);
+
+      if ((tsLogObj.lines > tsLogObj.maxLines) && (tsLogObj.openInProgress == 0)) taosOpenNewLogFile();
+    }
+  }
+
+  if (dflag & DEBUG_SCREEN) taosWrite(1, buffer, (uint32_t)len);
+  if (dflag == 255) nInfo(buffer, len);
+}
+
+
 void taosPrintLog(const char *flags, int32_t dflag, const char *format, ...) {
   if (tsTotalLogDirGB != 0 && tsAvailLogDirGB < tsMinimalLogDirGB) {
     printf("server disk:%s space remain %.3f GB, total %.1f GB, stop print log.\n", tsLogDir, tsAvailLogDirGB, tsTotalLogDirGB);
