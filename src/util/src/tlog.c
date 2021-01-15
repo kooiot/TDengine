@@ -364,7 +364,7 @@ void taosDbgPrintLog(const char *flags, int32_t dflag, char *file, int line, con
   ptm = localtime_r(&curTime, &Tm);
 
   len = sprintf(buffer, "%02d/%02d %02d:%02d:%02d.%06d 0x%08" PRIx64 "  %8.8s:%4d ", ptm->tm_mon + 1, ptm->tm_mday, ptm->tm_hour,
-                ptm->tm_min, ptm->tm_sec, (int32_t)timeSecs.tv_usec, taosGetSelfPthreadId(), file, line);
+                ptm->tm_min, ptm->tm_sec, (int32_t)timeSecs.tv_usec, taosGetSelfPthreadId(), strlen(file) > 8 ? file + strlen(file) - 8 : file, line);
   len += sprintf(buffer + len, "%s", flags);
 
   va_start(argpointer, format);
