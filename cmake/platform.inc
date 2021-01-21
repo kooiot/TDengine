@@ -79,12 +79,12 @@ ELSE()
 ENDIF ()
 
 # if generate ARM version:
-#   cmake -DCPUTYPE=aarch32 .. or cmake -DCPUTYPE=aarch64
-IF (${CPUTYPE} MATCHES "aarch32")
+#   cmake -DCPUTYPE=arm .. or cmake -DCPUTYPE=aarch64
+IF (${CPUTYPE} MATCHES "arm")
   SET(TD_LINUX TRUE)
   SET(TD_LINUX_32 FALSE)
   SET(TD_ARM_32 TRUE)
-  MESSAGE(STATUS "input cpuType: aarch32")
+  MESSAGE(STATUS "input cpuType: arm")
 ELSEIF (${CPUTYPE} MATCHES "aarch64")
   SET(TD_LINUX TRUE)
   SET(TD_LINUX_64 FALSE)
