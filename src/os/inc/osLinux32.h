@@ -75,7 +75,9 @@ extern "C" {
 #include <fcntl.h>
 #include <sys/utsname.h>
 #include <sys/resource.h>
+#ifndef NO_ERROR_H
 #include <error.h>
+#endif
 #include <math.h>
 
 #define TAOS_OS_FUNC_LZ4

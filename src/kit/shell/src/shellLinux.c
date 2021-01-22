@@ -164,7 +164,7 @@ void shellParseArgument(int argc, char *argv[], SShellArguments *arguments) {
   
   argp_parse(&argp, argc, argv, 0, 0, arguments);
   if (arguments->abort) {
-    #ifndef _ALPINE
+    #ifndef NO_ERROR_H
       error(10, 0, "ABORTED");
     #else
       abort();

@@ -38,7 +38,7 @@ static void *taosProcessAlarmSignal(void *tharg) {
 
   struct sigevent sevent = {{0}};
 
-  #ifdef _ALPINE
+  #ifndef SIGEV_THREAD_ID
     sevent.sigev_notify = SIGEV_THREAD;
     sevent.sigev_value.sival_int = syscall(__NR_gettid);
   #else

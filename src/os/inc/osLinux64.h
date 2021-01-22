@@ -75,7 +75,7 @@ extern "C" {
 #include <fcntl.h>
 #include <sys/utsname.h>
 #include <sys/resource.h>
-#ifndef _ALPINE
+#ifndef NO_ERROR_H
 #include <error.h>
 #endif
 #include <linux/sysctl.h>

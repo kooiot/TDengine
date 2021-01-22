@@ -31,7 +31,7 @@
   #include <argp.h>
   #include <assert.h>
   #include <inttypes.h>
-  #ifndef _ALPINE
+  #ifndef NO_ERROR_H
     #include <error.h>
   #endif
   #include <pthread.h>
@@ -519,7 +519,7 @@ static struct argp argp = {options, parse_opt, 0, 0};
 void parse_args(int argc, char *argv[], SArguments *arguments) {
   argp_parse(&argp, argc, argv, 0, 0, arguments);
   if (arguments->abort) {
-    #ifndef _ALPINE
+    #ifndef NO_ERROR_H
       error(10, 0, "ABORTED");
     #else
       abort();

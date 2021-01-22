@@ -460,7 +460,7 @@ int main(int argc, char *argv[]) {
   argp_parse(&argp, argc, argv, 0, 0, &tsArguments);
 
   if (tsArguments.abort) {
-    #ifndef _ALPINE
+    #ifndef NO_ERROR_H
       error(10, 0, "ABORTED");
     #else
       abort();

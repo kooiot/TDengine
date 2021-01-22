@@ -25,11 +25,19 @@ extern "C" {
 #endif
 
 #ifdef _TD_ARM_64
+#ifndef _OPENWRT
 #include "osArm64.h"
+#else
+#include "osAlpine.h"
+#endif
 #endif
 
 #ifdef _TD_ARM_32
+#ifndef _OPENWRT
 #include "osArm32.h"
+#else
+#include "osAlpine.h"
+#endif
 #endif
 
 #ifdef _TD_LINUX_64
