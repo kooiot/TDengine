@@ -16,7 +16,7 @@ IF (TD_LINUX)
     FIND_PATH(ICONV_LIBRARY_SO_EXIST libiconv.so /usr/lib/ /usr/local/lib/ /lib64)
 	IF (ICONV_LIBRARY_A_EXIST OR ICONV_LIBRARY_SO_EXIST)
       MESSAGE(STATUS "Use the installed libiconv library")
-      TARGET_LINK_LIBRARIES(tutil iconv)
+      TARGET_LINK_LIBRARIES(iconv)
     ELSE ()
       # libiconv library is already included in GLIBC,
       MESSAGE(STATUS "Use the iconv functions in GLIBC")

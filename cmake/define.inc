@@ -97,6 +97,7 @@ ENDIF ()
 
 IF (TD_OPENWRT)
   link_libraries(argp)
+  link_libraries(libiconv.a)
   ADD_DEFINITIONS(-D_OPENWRT)
   ADD_DEFINITIONS(-DNO_ERROR_H)
 ENDIF ()
